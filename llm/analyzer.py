@@ -7,18 +7,15 @@ import requests
 # ============================================================
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-
 LOCAL_MODEL_NAME = "qwen2.5:3b-instruct"
 
 
 # ============================================================
-# HUGGING FACE CONFIGURATION
+# GROQ CONFIGURATION
 # ============================================================
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-# Qwen model available through Hugging Face Inference Providers
-HF_MODEL_NAME = "Qwen/Qwen2.5-3B-Instruct"
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL_NAME = "llama-3.1-8b-instant"
 
 
 # ============================================================
@@ -27,25 +24,16 @@ HF_MODEL_NAME = "Qwen/Qwen2.5-3B-Instruct"
 
 def analyze_food(food_name, custom_prompt=None):
     """
-    Analyze a recognized food using Qwen.
+    Analyze recognized food using:
 
     Local:
         Ollama + Qwen 2.5
 
     Deployed:
-        Hugging Face Inference Providers + Qwen
+        Groq + Llama 3.1
 
-    Parameters:
-        food_name: recognized food name
-        custom_prompt: optional additional user question
-
-    Returns:
-        AI-generated food analysis
+    The function keeps the same interface used by app.py.
     """
-
-    # ========================================================
-    # DEFAULT FOOD ANALYSIS PROMPT
-    # ========================================================
 
     prompt = f"""
 You are an AI food and nutrition assistant.
@@ -92,13 +80,8 @@ Keep the answer concise and easy for a normal person to understand.
 Do not give medical advice.
 """
 
-
-    # ========================================================
-    # OPTIONAL CUSTOM QUESTION
-    # ========================================================
-
+    # Optional custom question
     if custom_prompt:
-
         prompt += f"""
 
 Additional user request:
@@ -106,44 +89,68 @@ Additional user request:
 {custom_prompt}
 """
 
-
     # ========================================================
-    # DEPLOYMENT MODE — HUGGING FACE
+    # DEPLOYED MODE — GROQ
     # ========================================================
 
-    if HF_TOKEN:
+    groq_api_key = os.getenv("GROQ_API_KEY")
+
+    if groq_api_key:
+
+        headers = {
+            "Authorization": f"Bearer {groq_api_key}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "model": GROQ_MODEL_NAME,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful AI food and nutrition "
+                        "assistant. Be concise and informative."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 700,
+            "stream": False
+        }
 
         try:
 
-            from huggingface_hub import InferenceClient
-
-            client = InferenceClient(
-                provider="auto",
-                api_key=HF_TOKEN
+            response = requests.post(
+                GROQ_API_URL,
+                headers=headers,
+                json=payload,
+                timeout=60
             )
 
-            response = client.chat.completions.create(
-                model=HF_MODEL_NAME,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                max_tokens=700,
-                temperature=0.7
+            response.raise_for_status()
+
+            data = response.json()
+
+            return data["choices"][0]["message"]["content"]
+
+        except requests.exceptions.Timeout:
+
+            return (
+                "❌ The AI analysis took too long. "
+                "Please try again."
             )
 
-            return response.choices[0].message.content
+        except requests.exceptions.RequestException as e:
 
+            return f"❌ Groq AI analysis failed: {e}"
 
         except Exception as e:
 
-            return (
-                "❌ Hugging Face AI analysis failed: "
-                f"{e}"
-            )
-
+            return f"❌ Error processing AI response: {e}"
 
     # ========================================================
     # LOCAL MODE — OLLAMA
@@ -154,7 +161,6 @@ Additional user request:
         "prompt": prompt,
         "stream": False
     }
-
 
     try:
 
@@ -173,14 +179,12 @@ Additional user request:
             "No analysis was returned."
         )
 
-
     except requests.exceptions.ConnectionError:
 
         return (
             "❌ Could not connect to Ollama. "
             "Make sure Ollama is running."
         )
-
 
     except requests.exceptions.Timeout:
 
@@ -189,9 +193,6 @@ Additional user request:
             "Please try again."
         )
 
-
     except Exception as e:
 
-        return (
-            f"❌ Error communicating with Qwen: {e}"
-        )
+        return f"❌ Error communicating with Qwen: {e}"
