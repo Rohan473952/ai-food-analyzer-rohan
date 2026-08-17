@@ -1,0 +1,7 @@
+streamlit
+torch
+torchvision
+transformers
+Pillow
+requests
+huggingface_hub
