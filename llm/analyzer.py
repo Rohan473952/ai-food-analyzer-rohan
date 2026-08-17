@@ -15,7 +15,7 @@ LOCAL_MODEL_NAME = "qwen2.5:3b-instruct"
 # ============================================================
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL_NAME = "llama-3.1-8b-instant"
+GROQ_MODEL_NAME = "openai/gpt-oss-20b"
 
 
 # ============================================================
