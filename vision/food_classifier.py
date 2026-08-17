@@ -7,7 +7,6 @@ from transformers import (
     CLIPModel,
 )
 
-
 # ============================================================
 # DEVICE
 # ============================================================
@@ -66,51 +65,61 @@ FOOD_PROMPTS = {
     # --------------------------------------------------------
 
     "momo": [
-        "a photo of momo",
-        "traditional Nepali momo",
+        "a photo of Nepali momo",
+        "traditional Nepali momo dumplings",
         "Nepali steamed dumplings called momo",
-        "a plate of momos",
-        "Nepali dumplings",
+        "a plate of Nepali momos",
+        "Nepali dumplings served with dipping sauce",
+        "steamed or fried momo dumplings from Nepal",
     ],
 
     "dal bhat": [
-        "a photo of dal bhat",
+        "a photo of Nepali dal bhat",
         "traditional Nepali dal bhat",
         "a traditional Nepali meal of rice and lentils",
-        "Nepali rice and lentil curry",
-        "a plate of dal bhat",
+        "Nepali rice served with lentil soup and curry",
+        "a plate of dal bhat tarkari",
+        "Nepali rice, dal and vegetable curry meal",
     ],
 
     "thukpa": [
-        "a photo of thukpa",
+        "a photo of Nepali thukpa",
         "traditional Nepali thukpa",
         "Nepali noodle soup",
-        "a bowl of thukpa",
-        "Himalayan noodle soup",
+        "a bowl of Nepali thukpa",
+        "Himalayan noodle soup with vegetables",
+        "traditional Himalayan noodle soup",
     ],
 
     "sel roti": [
-        "a photo of sel roti",
-        "traditional Nepali sel roti",
-        "Nepali ring shaped rice bread",
-        "traditional Nepali rice bread",
-        "a plate of sel roti",
+        "a photo of traditional Nepali sel roti",
+        "traditional Nepali sel roti on a plate",
+        "Nepali sel roti made from rice flour",
+        "deep fried Nepali rice flour bread called sel roti",
+        "traditional homemade sel roti from Nepal",
+        "golden brown ring shaped Nepali rice bread",
+        "crispy ring shaped Nepali rice flour bread",
+        "multiple pieces of traditional sel roti",
+        "Nepali festival food sel roti",
+        "traditional Nepali fried rice bread",
     ],
 
     "yomari": [
-        "a photo of yomari",
-        "traditional Nepali yomari",
-        "Nepali sweet rice dumpling",
+        "a photo of traditional Nepali yomari",
         "traditional Newari yomari",
+        "Nepali sweet rice flour dumpling",
+        "Newari sweet rice dumpling filled with chaku",
         "a plate of yomari",
+        "traditional yomari from Nepal",
     ],
 
     "chatamari": [
-        "a photo of chatamari",
-        "traditional Nepali chatamari",
-        "Newari rice crepe",
-        "Nepali rice flour crepe",
+        "a photo of traditional Nepali chatamari",
+        "traditional Newari chatamari",
+        "Newari rice flour crepe",
+        "Nepali rice flour crepe with toppings",
         "a plate of chatamari",
+        "traditional Newari rice pancake",
     ],
 
     # --------------------------------------------------------
@@ -123,6 +132,7 @@ FOOD_PROMPTS = {
         "South Asian samosa",
         "a plate of samosas",
         "crispy triangular samosa",
+        "deep fried samosa",
     ],
 
     "biryani": [
@@ -131,6 +141,7 @@ FOOD_PROMPTS = {
         "South Asian biryani",
         "a plate of biryani",
         "rice dish with meat and spices",
+        "fragrant spiced biryani rice",
     ],
 
     "naan": [
@@ -139,6 +150,7 @@ FOOD_PROMPTS = {
         "traditional naan",
         "a piece of naan",
         "Indian flatbread naan",
+        "freshly cooked naan bread",
     ],
 
     "butter chicken": [
@@ -147,6 +159,7 @@ FOOD_PROMPTS = {
         "chicken in creamy tomato curry",
         "Indian chicken curry with tomato sauce",
         "a bowl of butter chicken",
+        "creamy Indian chicken curry",
     ],
 
     "dosa": [
@@ -155,6 +168,7 @@ FOOD_PROMPTS = {
         "Indian crispy dosa",
         "a plate of dosa",
         "traditional Indian rice crepe",
+        "thin crispy South Indian dosa",
     ],
 
     # --------------------------------------------------------
@@ -167,6 +181,7 @@ FOOD_PROMPTS = {
         "Japanese sushi rolls",
         "a plate of sushi",
         "assorted sushi",
+        "traditional Japanese sushi",
     ],
 
     "ramen": [
@@ -175,6 +190,7 @@ FOOD_PROMPTS = {
         "Japanese noodle soup",
         "a bowl of ramen",
         "traditional ramen noodles",
+        "Japanese noodle soup with toppings",
     ],
 
     "chow mein": [
@@ -183,6 +199,7 @@ FOOD_PROMPTS = {
         "stir fried noodles",
         "a plate of chow mein",
         "Asian stir fried noodles",
+        "Chinese fried noodles",
     ],
 
     "fried rice": [
@@ -191,6 +208,7 @@ FOOD_PROMPTS = {
         "Chinese fried rice",
         "a plate of fried rice",
         "stir fried rice",
+        "Asian rice fried with vegetables",
     ],
 
     "dumplings": [
@@ -199,6 +217,7 @@ FOOD_PROMPTS = {
         "steamed dumplings",
         "a plate of dumplings",
         "Chinese dumplings",
+        "assorted steamed dumplings",
     ],
 
     # --------------------------------------------------------
@@ -211,6 +230,7 @@ FOOD_PROMPTS = {
         "a slice of pizza",
         "a whole pizza",
         "cheesy pizza",
+        "freshly baked pizza",
     ],
 
     "hamburger": [
@@ -219,6 +239,7 @@ FOOD_PROMPTS = {
         "a cheeseburger",
         "a beef burger",
         "a burger with fries",
+        "American burger",
     ],
 
     "pasta": [
@@ -227,6 +248,7 @@ FOOD_PROMPTS = {
         "a plate of pasta",
         "Italian noodles",
         "cooked pasta",
+        "traditional Italian pasta",
     ],
 
     "steak": [
@@ -235,6 +257,7 @@ FOOD_PROMPTS = {
         "beef steak",
         "a cooked steak",
         "a plate of steak",
+        "grilled beef steak",
     ],
 
     "pancakes": [
@@ -243,6 +266,7 @@ FOOD_PROMPTS = {
         "a stack of pancakes",
         "breakfast pancakes",
         "fluffy pancakes",
+        "a plate of pancakes",
     ],
 
     "french fries": [
@@ -251,6 +275,7 @@ FOOD_PROMPTS = {
         "a serving of french fries",
         "potato fries",
         "a plate of fries",
+        "golden fried potato fries",
     ],
 
     "fried chicken": [
@@ -259,6 +284,7 @@ FOOD_PROMPTS = {
         "fried chicken pieces",
         "a plate of fried chicken",
         "American fried chicken",
+        "deep fried chicken",
     ],
 }
 
@@ -303,7 +329,6 @@ clip_food_names = list(FOOD_PROMPTS.keys())
 
 clip_text_features = []
 
-
 with torch.no_grad():
 
     for food_name in clip_food_names:
@@ -335,12 +360,12 @@ with torch.no_grad():
             keepdim=True
         )
 
-        # Average the multiple prompts
+        # Average multiple prompts
         food_feature = text_features.mean(
             dim=0
         )
 
-        # Normalize the final food representation
+        # Normalize final food representation
         food_feature = food_feature / food_feature.norm()
 
         clip_text_features.append(
@@ -366,13 +391,16 @@ def classify_food(image, top_k=5):
         1. Food-101
         2. Prompt-enhanced CLIP
 
+    CLIP is given a higher weight because it can recognize
+    foods that are not present in Food-101, especially
+    Nepali foods.
+
     Parameters:
         image: PIL Image or image path
         top_k: number of predictions to return
 
     Returns:
         List of dictionaries:
-
         [
             {
                 "food": "pizza",
@@ -387,7 +415,6 @@ def classify_food(image, top_k=5):
     # --------------------------------------------------------
 
     if not isinstance(image, Image.Image):
-
         image = Image.open(image)
 
     image = image.convert("RGB")
@@ -406,7 +433,6 @@ def classify_food(image, top_k=5):
         key: value.to(device)
         for key, value in food101_inputs.items()
     }
-
 
     with torch.no_grad():
 
@@ -433,7 +459,6 @@ def classify_food(image, top_k=5):
         key: value.to(device)
         for key, value in clip_inputs.items()
     }
-
 
     with torch.no_grad():
 
@@ -469,10 +494,14 @@ def classify_food(image, top_k=5):
 
     combined_scores = {}
 
-
     # --------------------------------------------------------
     # Food-101 contribution
+    #
+    # Reduced from 60% -> 35%
     # --------------------------------------------------------
+
+    FOOD101_WEIGHT = 0.35
+    CLIP_WEIGHT = 0.65
 
     for index, probability in enumerate(
         food101_probs
@@ -489,12 +518,14 @@ def classify_food(image, top_k=5):
         )
 
         combined_scores[label] = (
-            probability.item() * 0.60
+            probability.item() * FOOD101_WEIGHT
         )
 
 
     # --------------------------------------------------------
     # CLIP contribution
+    #
+    # Increased from 40% -> 65%
     # --------------------------------------------------------
 
     for index, probability in enumerate(
@@ -503,7 +534,7 @@ def classify_food(image, top_k=5):
 
         label = clip_food_names[index]
 
-        score = probability.item() * 0.40
+        score = probability.item() * CLIP_WEIGHT
 
         if label in combined_scores:
 
@@ -512,6 +543,30 @@ def classify_food(image, top_k=5):
         else:
 
             combined_scores[label] = score
+
+
+    # ========================================================
+    # SPECIAL BOOST FOR NEPALI FOODS
+    # ========================================================
+    #
+    # Nepali foods are not well represented in Food-101.
+    # Give their CLIP predictions a small additional boost.
+    #
+
+    nepali_foods = {
+        "momo",
+        "dal bhat",
+        "thukpa",
+        "sel roti",
+        "yomari",
+        "chatamari"
+    }
+
+    for food in nepali_foods:
+
+        if food in combined_scores:
+
+            combined_scores[food] *= 1.12
 
 
     # ========================================================
@@ -526,19 +581,34 @@ def classify_food(image, top_k=5):
 
 
     # ========================================================
-    # RETURN TOP K
+    # NORMALIZE TOP RESULTS
     # ========================================================
+
+    top_predictions = sorted_predictions[:top_k]
+
+    total = sum(
+        score for _, score in top_predictions
+    )
 
     results = []
 
-    for food, score in sorted_predictions[:top_k]:
+    for food, score in top_predictions:
+
+        if total > 0:
+            confidence = score / total
+        else:
+            confidence = score
 
         results.append(
             {
                 "food": food,
-                "confidence": float(score)
+                "confidence": float(confidence)
             }
         )
 
+
+    # ========================================================
+    # RETURN
+    # ========================================================
 
     return results
