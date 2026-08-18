@@ -3,21 +3,15 @@ import re
 import streamlit as st
 
 
-# ============================================================
-# GROQ CONFIGURATION
-# ============================================================
-
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-GROQ_MODEL_NAME = "openai/gpt-oss-20b"
+GROQ_MODEL_NAME = "llama-3.1-8b-instant"
 
-# Get the API key securely from Streamlit Secrets
+
 try:
-    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"].strip()
 except Exception:
     GROQ_API_KEY = None
-
-
 # ============================================================
 # FOOD ANALYZER
 # ============================================================
@@ -162,11 +156,14 @@ Follow the five-section format above regardless of the request.
     try:
 
         response = requests.post(
-            GROQ_URL,
-            headers=headers,
-            json=payload,
-            timeout=90
-        )
+          GROQ_URL,
+          headers={
+             "Authorization": f"Bearer {GROQ_API_KEY}",
+             "Content-Type": "application/json"
+         },
+         json=payload,
+         timeout=90
+      )
 
         response.raise_for_status()
 
