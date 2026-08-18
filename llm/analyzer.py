@@ -1,5 +1,6 @@
 import requests
 import re
+import streamlit as st
 
 
 # ============================================================
@@ -9,6 +10,12 @@ import re
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 GROQ_MODEL_NAME = "openai/gpt-oss-20b"
+
+# Get the API key securely from Streamlit Secrets
+try:
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+except Exception:
+    GROQ_API_KEY = None
 
 
 # ============================================================
@@ -20,9 +27,29 @@ def analyze_food(food_name, custom_prompt=None):
     Analyze a recognized food using Groq.
 
     Returns a short, structured five-section response.
-    Compatible with the existing app.py call:
+
+    Compatible with:
         analyze_food(food_name, custom_prompt=...)
     """
+
+    # --------------------------------------------------------
+    # CHECK API KEY
+    # --------------------------------------------------------
+
+    if not GROQ_API_KEY:
+        return (
+            "❌ Groq API key is missing. "
+            "Please configure GROQ_API_KEY in Streamlit Secrets."
+        )
+
+    # --------------------------------------------------------
+    # GROQ HEADERS
+    # --------------------------------------------------------
+
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
 
     # --------------------------------------------------------
     # BASE PROMPT
@@ -102,9 +129,8 @@ Additional user request:
 Follow the five-section format above regardless of the request.
 """
 
-
     # ========================================================
-    # GROQ REQUEST
+    # FIRST GROQ REQUEST
     # ========================================================
 
     payload = {
@@ -125,21 +151,19 @@ Follow the five-section format above regardless of the request.
         ],
 
         "temperature": 0.2,
-
         "max_completion_tokens": 1200,
 
         "reasoning_effort": "low",
-
         "include_reasoning": False,
 
         "stream": False
     }
 
-
     try:
 
         response = requests.post(
             GROQ_URL,
+            headers=headers,
             json=payload,
             timeout=90
         )
@@ -166,12 +190,10 @@ Follow the five-section format above regardless of the request.
 
         answer = answer.strip()
 
-
         # ----------------------------------------------------
-        # CLEAN POSSIBLE REASONING / EXTRA TEXT
+        # REMOVE POSSIBLE REASONING
         # ----------------------------------------------------
 
-        # Remove accidental <think>...</think> blocks
         answer = re.sub(
             r"<think>.*?</think>",
             "",
@@ -179,9 +201,8 @@ Follow the five-section format above regardless of the request.
             flags=re.DOTALL | re.IGNORECASE
         ).strip()
 
-
         # ----------------------------------------------------
-        # ENSURE THE FIVE SECTIONS EXIST
+        # ENSURE FIVE SECTIONS EXIST
         # ----------------------------------------------------
 
         required_sections = [
@@ -198,10 +219,9 @@ Follow the five-section format above regardless of the request.
             if section not in answer
         ]
 
-
-        # ----------------------------------------------------
-        # IF THE MODEL RETURNED A PARTIAL ANSWER
-        # ----------------------------------------------------
+        # ====================================================
+        # SECOND REQUEST IF SECTIONS ARE MISSING
+        # ====================================================
 
         if missing_sections:
 
@@ -255,21 +275,19 @@ Rules:
                 ],
 
                 "temperature": 0.2,
-
                 "max_completion_tokens": 700,
 
                 "reasoning_effort": "low",
-
                 "include_reasoning": False,
 
                 "stream": False
             }
 
-
             try:
 
                 completion_response = requests.post(
                     GROQ_URL,
+                    headers=headers,
                     json=completion_payload,
                     timeout=60
                 )
@@ -307,11 +325,8 @@ Rules:
                         )
 
             except Exception:
-                # If the second request fails, keep the
-                # original response rather than breaking
-                # the entire application.
+                # Keep original answer if completion fails
                 pass
-
 
         # ----------------------------------------------------
         # FINAL CLEANUP
@@ -320,7 +335,6 @@ Rules:
         answer = answer.strip()
 
         return answer
-
 
     # ========================================================
     # ERROR HANDLING
@@ -343,6 +357,7 @@ Rules:
     except requests.exceptions.HTTPError as e:
 
         try:
+
             error_details = response.json()
 
             error_message = (
@@ -352,6 +367,7 @@ Rules:
             )
 
         except Exception:
+
             error_message = str(e)
 
         return (
