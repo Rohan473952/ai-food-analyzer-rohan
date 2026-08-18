@@ -5,7 +5,7 @@ import streamlit as st
 
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-GROQ_MODEL_NAME = "llama-3.1-8b-instant"
+GROQ_MODEL_NAME = "openai/gpt-oss-20b"
 
 
 try:
